@@ -93,8 +93,12 @@ public class MtcdAutoVolumeService extends Service {
         @Override
         public void onLocationChanged(Location location) {
             if(location.hasSpeed() && mAutoVolumeManager.isActive()) {
-                final int speedKph = (int)((location.getSpeed() * 3600) / 1000);
-                mAutoVolumeManager.adjustVolumeForSpeed(speedKph);
+                try {
+                    final int speedKph = (int) ((location.getSpeed() * 3600) / 1000);
+                    mAutoVolumeManager.adjustVolumeForSpeed(speedKph);
+                } catch(IndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
             }
         }
 
