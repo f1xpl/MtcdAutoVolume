@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.microntek.CarManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -131,6 +132,13 @@ public class MainActivity extends AppCompatActivity {
 
         for(int i = 0; i < EQUALIZER_BAR_IDS.length; ++i) {
             mEqualizerBars.get(i).setVolumeLevel(mVolumeLevelsStorage.getLevel(i));
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == ACCESS_FINE_LOCATION_PERMISSION_REQUEST_ID && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startService(new Intent(this, MtcdAutoVolumeService.class));
         }
     }
 
