@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/layoutEqualizerBar0" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar1" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar2" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar3" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar4" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar5" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar6" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar7" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar8" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar9" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar10" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar11" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar12" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar13" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar14" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar15" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar16" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar17" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar18" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar19" layout="@layout/equalizer_bar"/>
+    </LinearLayout>
+</ScrollView>

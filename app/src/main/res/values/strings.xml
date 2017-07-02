@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MtcdAutoVolume</string>
+    <string name="ToggleSpeedUnit">Toggle speed unit</string>
+    <string name="Save">Save</string>
+    <string name="SetLinear">Set linear</string>
+    <string name="VolumeLevelsGenerationError">Unable to generate volume levels</string>
+    <string name="StoreVolumeLevelsError">Unable to store volume levels</string>
+    <string name="VolumeLevelsSaved">Volume levels have been saved</string>
+    <string name="VolumeLevelsReadError">Unable to read volume levels</string>
+    <string name="AutoVolumeEnabled">Auto volume has been enabled</string>
+    <string name="AutoVolumeDisabled">Auto volume has been disabled</string>
+</resources>
