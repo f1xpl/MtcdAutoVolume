@@ -41,7 +41,7 @@ public class SpeedRange {
         int currentMaxSpeedKph = SpeedRange.MIN_SPEED + speedStep;
 
         for(int i = 0; i < count; ++i) {
-            list.add( new SpeedRange(currentMinSpeedKph, currentMaxSpeedKph - 1));
+            list.add(new SpeedRange(currentMinSpeedKph, currentMaxSpeedKph - 1));
             currentMinSpeedKph += speedStep;
             currentMaxSpeedKph += speedStep;
         }

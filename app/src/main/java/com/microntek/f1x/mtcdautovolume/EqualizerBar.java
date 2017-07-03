@@ -3,7 +3,6 @@ package com.microntek.f1x.mtcdautovolume;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.microntek.f1x.mtcdautovolume.speed.SpeedRange;
 import com.microntek.f1x.mtcdautovolume.speed.SpeedUnit;
@@ -14,7 +13,7 @@ import com.microntek.f1x.mtcdautovolume.volume.VolumeLevelManager;
  */
 
 public class EqualizerBar implements SeekBar.OnSeekBarChangeListener {
-    EqualizerBar(LinearLayout layout, SpeedRange speedRange, SpeedUnit currentSpeedUnit, VolumeLevelManager volumeLevelManager) {
+    public EqualizerBar(LinearLayout layout, SpeedRange speedRange, SpeedUnit currentSpeedUnit, VolumeLevelManager volumeLevelManager) {
         mVolumeLevelSeekBar = (SeekBar) layout.findViewById(R.id.seekBarVolumeLevel);
         mVolumeLevelSeekBar.setOnSeekBarChangeListener(this);
         mSpeedRangeTextView = (TextView)layout.findViewById(R.id.textViewSpeedRange);
@@ -25,10 +24,6 @@ public class EqualizerBar implements SeekBar.OnSeekBarChangeListener {
 
         setVolumeLevel(0);
         mVolumeLevelSeekBar.setMax(100);
-    }
-
-    void destroy() {
-        mVolumeLevelSeekBar.setOnSeekBarChangeListener(null);
     }
 
     public void toggleSpeedUnit() {

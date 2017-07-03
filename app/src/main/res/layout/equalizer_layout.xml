@@ -47,5 +47,21 @@
             android:id="@+id/layoutEqualizerBar18" layout="@layout/equalizer_bar"/>
         <include
             android:id="@+id/layoutEqualizerBar19" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar20" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar21" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar22" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar23" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar24" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar25" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar26" layout="@layout/equalizer_bar"/>
+        <include
+            android:id="@+id/layoutEqualizerBar27" layout="@layout/equalizer_bar"/>
     </LinearLayout>
 </ScrollView>

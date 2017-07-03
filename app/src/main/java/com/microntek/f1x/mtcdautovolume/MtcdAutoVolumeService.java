@@ -17,13 +17,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.widget.Toast;
 
-import com.microntek.f1x.mtcdautovolume.speed.SpeedRange;
+import com.microntek.f1x.mtcdautovolume.activities.MainActivity;
 import com.microntek.f1x.mtcdautovolume.volume.VolumeLevelManager;
 import com.microntek.f1x.mtcdautovolume.volume.VolumeLevelsStorage;
 
 import org.json.JSONException;
-
-import java.util.List;
 
 /**
  * Created by COMPUTER on 2017-07-01.
@@ -47,7 +45,12 @@ public class MtcdAutoVolumeService extends Service {
                                                    new VolumeLevelsStorage(getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE)),
                                                    MainActivity.EQUALIZER_BAR_IDS.length);
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        registerReceiver(mAutoVolumeToggleListener, new IntentFilter(AUTO_VOLUME_TOGGLE_ACTION));
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(AUTO_VOLUME_TOGGLE_ACTION);
+        intentFilter.addAction(AUTO_VOLUME_DISABLE_ACTION);
+        intentFilter.addAction(AUTO_VOLUME_ENABLE_ACTION);
+        registerReceiver(mAutoVolumeToggleListener, intentFilter);
     }
 
     @Override
@@ -78,7 +81,7 @@ public class MtcdAutoVolumeService extends Service {
                 mServiceInitialized = true;
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(this, this.getString(R.string.VolumeLevelsReadError), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, this.getString(R.string.UnableToReadVolumeLevelSettings), Toast.LENGTH_LONG).show();
             }
         }
 
@@ -92,7 +95,7 @@ public class MtcdAutoVolumeService extends Service {
     private LocationListener mVehicleSpeedListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            if(location.hasSpeed() && mAutoVolumeManager.isActive()) {
+            if(location.hasSpeed()) {
                 try {
                     final int speedKph = (int) ((location.getSpeed() * 3600) / 1000);
                     mAutoVolumeManager.adjustVolumeForSpeed(speedKph);
@@ -121,8 +124,17 @@ public class MtcdAutoVolumeService extends Service {
     private BroadcastReceiver mAutoVolumeToggleListener = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            final boolean currentState = mAutoVolumeManager.isActive();
+
             if(AUTO_VOLUME_TOGGLE_ACTION.equals(intent.getAction())) {
                 mAutoVolumeManager.toggleActive();
+            } else if(AUTO_VOLUME_DISABLE_ACTION.equals(intent.getAction())) {
+                mAutoVolumeManager.disable();
+            } else if(AUTO_VOLUME_ENABLE_ACTION.equals(intent.getAction())) {
+                mAutoVolumeManager.enable();
+            }
+
+            if(currentState != mAutoVolumeManager.isActive()) {
                 final int textResourceId = mAutoVolumeManager.isActive() ? R.string.AutoVolumeEnabled : R.string.AutoVolumeDisabled;
                 Toast.makeText(MtcdAutoVolumeService.this, MtcdAutoVolumeService.this.getString(textResourceId), Toast.LENGTH_LONG).show();
             }
@@ -130,4 +142,6 @@ public class MtcdAutoVolumeService extends Service {
     };
 
     private static final String AUTO_VOLUME_TOGGLE_ACTION = "com.microntek.f1x.mtcdautovolume.toggle";
+    private static final String AUTO_VOLUME_DISABLE_ACTION = "com.microntek.f1x.mtcdautovolume.disable";
+    private static final String AUTO_VOLUME_ENABLE_ACTION = "com.microntek.f1x.mtcdautovolume.enable";
 }

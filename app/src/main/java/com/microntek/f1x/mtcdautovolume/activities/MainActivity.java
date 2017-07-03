@@ -1,4 +1,4 @@
-package com.microntek.f1x.mtcdautovolume;
+package com.microntek.f1x.mtcdautovolume.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -14,6 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.microntek.f1x.mtcdautovolume.EqualizerBar;
+import com.microntek.f1x.mtcdautovolume.MtcdAutoVolumeService;
+import com.microntek.f1x.mtcdautovolume.R;
 import com.microntek.f1x.mtcdautovolume.speed.SpeedRange;
 import com.microntek.f1x.mtcdautovolume.speed.SpeedUnit;
 import com.microntek.f1x.mtcdautovolume.volume.VolumeLevelManager;
@@ -30,19 +33,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        if ( ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            startService(new Intent(this, MtcdAutoVolumeService.class));
-        } else {
-            ActivityCompat.requestPermissions( this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, ACCESS_FINE_LOCATION_PERMISSION_REQUEST_ID);
-        }
+        checkLocationPermissions();
 
         mVolumeLevelsStorage = new VolumeLevelsStorage(getSharedPreferences(MtcdAutoVolumeService.SHARED_PREFERENCES_NAME, MODE_PRIVATE));
         mEqualizerBars = new ArrayList<>();
         mVolumeLevelManager = new VolumeLevelManager(new CarManager());
-        createEqualizerBars(EQUALIZER_BAR_IDS, SpeedUnit.KPH);
 
         try {
+            createEqualizerBars(EQUALIZER_BAR_IDS, SpeedUnit.KPH);
             setVolumeLevels();
         } catch (JSONException | IndexOutOfBoundsException e) {
             e.printStackTrace();
@@ -60,7 +58,9 @@ public class MainActivity extends AppCompatActivity {
         setLinearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                generateLinearLevels();
+                Intent intent = new Intent(MainActivity.this, VolumeLevelRangeActivity.class);
+                intent.putExtra(VolumeLevelRangeActivity.VOLUME_LEVELS_COUNT_EXTRA, EQUALIZER_BAR_IDS.length);
+                MainActivity.this.startActivityForResult(intent, GENERATE_RANGE_REQUEST_ID);
             }
         });
 
@@ -77,9 +77,23 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         mVolumeLevelsStorage.destroy();
+    }
 
-        for(EqualizerBar equalizerBar : mEqualizerBars) {
-            equalizerBar.destroy();
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode == ACCESS_FINE_LOCATION_PERMISSION_REQUEST_ID && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            startService(new Intent(this, MtcdAutoVolumeService.class));
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK && requestCode == GENERATE_RANGE_REQUEST_ID) {
+            final int[] range = data.getIntArrayExtra(VolumeLevelRangeActivity.GENERATED_RANGE_EXTRA);
+
+            for(int i = 0; i < mEqualizerBars.size(); ++i) {
+                mEqualizerBars.get(i).setVolumeLevel(range[i]);
+            }
         }
     }
 
@@ -89,32 +103,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    void generateLinearLevels() {
-        final int step = 100 / mEqualizerBars.size();
-        int progress = step;
-
-        for(EqualizerBar equalizerBar : mEqualizerBars) {
-            equalizerBar.setVolumeLevel(progress);
-            progress += step;
-        }
-    }
-
     void saveVolumeLevels() {
         List<Integer> volumeLevels = new ArrayList<>();
         for(EqualizerBar equalizerBar : mEqualizerBars) {
             volumeLevels.add(equalizerBar.getVolumeLevel());
         }
 
+        int textId;
+
         try {
-            if(mVolumeLevelsStorage.storeVolumeLevels(volumeLevels)) {
-                Toast.makeText(this, this.getString(R.string.VolumeLevelsSaved), Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, this.getString(R.string.StoreVolumeLevelsError), Toast.LENGTH_LONG).show();
-            }
+            textId = mVolumeLevelsStorage.storeVolumeLevels(volumeLevels) ? R.string.VolumeLevelsSaved : R.string.UnableToStoreVolumeLevelSettings;
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(this, this.getString(R.string.VolumeLevelsGenerationError), Toast.LENGTH_LONG).show();
+            textId = R.string.UnableToCreateVolumeLevelSettings;
         }
+
+        Toast.makeText(this, this.getString(textId), Toast.LENGTH_LONG).show();
     }
 
     void createEqualizerBars(int resIds[], SpeedUnit speedUnit) {
@@ -135,10 +139,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode == ACCESS_FINE_LOCATION_PERMISSION_REQUEST_ID && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+    void checkLocationPermissions() {
+        if ( ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             startService(new Intent(this, MtcdAutoVolumeService.class));
+        } else {
+            ActivityCompat.requestPermissions( this, new String[]{ Manifest.permission.ACCESS_FINE_LOCATION }, ACCESS_FINE_LOCATION_PERMISSION_REQUEST_ID);
         }
     }
 
@@ -147,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
     private VolumeLevelManager mVolumeLevelManager;
 
     private final int ACCESS_FINE_LOCATION_PERMISSION_REQUEST_ID = 1443;
+    private final int GENERATE_RANGE_REQUEST_ID = 443;
     public static final int[] EQUALIZER_BAR_IDS = new int[]{R.id.layoutEqualizerBar0,
                                                                 R.id.layoutEqualizerBar1,
                                                                 R.id.layoutEqualizerBar2,
@@ -166,5 +172,13 @@ public class MainActivity extends AppCompatActivity {
                                                                 R.id.layoutEqualizerBar16,
                                                                 R.id.layoutEqualizerBar17,
                                                                 R.id.layoutEqualizerBar18,
-                                                                R.id.layoutEqualizerBar19};
+                                                                R.id.layoutEqualizerBar19,
+                                                                R.id.layoutEqualizerBar20,
+                                                                R.id.layoutEqualizerBar21,
+                                                                R.id.layoutEqualizerBar22,
+                                                                R.id.layoutEqualizerBar23,
+                                                                R.id.layoutEqualizerBar24,
+                                                                R.id.layoutEqualizerBar25,
+                                                                R.id.layoutEqualizerBar26,
+                                                                R.id.layoutEqualizerBar27};
 }

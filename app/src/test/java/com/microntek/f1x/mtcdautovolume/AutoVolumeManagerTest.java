@@ -70,6 +70,8 @@ public class AutoVolumeManagerTest {
         autoVolumeManager.toggleActive();
         assertFalse(autoVolumeManager.isActive());
 
+        autoVolumeManager.adjustVolumeForSpeed(speedKph);
+
         autoVolumeManager.toggleActive();
         assertTrue(autoVolumeManager.isActive());
 

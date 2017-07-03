@@ -11,15 +11,17 @@ public class VolumeLevelManager {
         mCarManager = carManager;
 
         try {
-            mMaxVolume = Integer.parseInt(mCarManager.getParameters("cfg_maxvolume"));
+            mMaxVolume = Integer.parseInt(mCarManager.getParameters(MAX_VOLUME_PARAMETER_NAME));
         } catch (Exception e) {
             mMaxVolume = 30;
         }
     }
 
     public void setVolumeLevel(double percent) {
-        final int currentVolume = (int)(mMaxVolume * (percent / 100));
-        mCarManager.setParameters("av_volume=" + calculateVolume(currentVolume));
+        if(mCarManager.getParameters(MUTE_PARAMETER_NAME).equals("false")) {
+            final int currentVolume = (int) (mMaxVolume * (percent / 100));
+            mCarManager.setParameters(VOLUME_PARAMETER_NAME + calculateVolume(currentVolume));
+        }
     }
 
     private int calculateVolume(int currentVolume) {
@@ -30,4 +32,8 @@ public class VolumeLevelManager {
 
     private int mMaxVolume;
     private final CarManager mCarManager;
+
+    private static final String VOLUME_PARAMETER_NAME = "av_volume=";
+    private static final String MUTE_PARAMETER_NAME = "av_mute=";
+    private static final String MAX_VOLUME_PARAMETER_NAME = "cfg_maxvolume";
 }
