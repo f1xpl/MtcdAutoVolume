@@ -13,16 +13,16 @@ import java.util.List;
  */
 
 class AutoVolumeManager {
-    AutoVolumeManager(VolumeLevelManager volumeLevelManager, VolumeLevelsStorage volumeLevelsStorage, int speedRangesCount) {
+    AutoVolumeManager(VolumeLevelManager volumeLevelManager, VolumeLevelsStorage volumeLevelsStorage) {
         mVolumeLevelManager = volumeLevelManager;
         mVolumeLevelsStorage = volumeLevelsStorage;
-        mSpeedRanges = SpeedRange.calculateSpeedRanges(speedRangesCount);
         mActive = true;
         mCurrentSpeedRange = null;
     }
 
     void initialize() throws JSONException {
         mVolumeLevelsStorage.readVolumeLevels();
+        mSpeedRanges = SpeedRange.calculateSpeedRanges(mVolumeLevelsStorage.getVolumeLevelsCount());
     }
 
     void destroy() {
@@ -30,7 +30,7 @@ class AutoVolumeManager {
     }
 
     void adjustVolumeForSpeed(int speedKph) throws IndexOutOfBoundsException {
-        if(mActive) {
+        if(mActive && mSpeedRanges != null) {
             for (int i = 0; i < mSpeedRanges.size(); ++i) {
                 SpeedRange speedRange = mSpeedRanges.get(i);
                 if (speedRange.isInRange(speedKph) && speedRange != mCurrentSpeedRange) {
@@ -59,9 +59,9 @@ class AutoVolumeManager {
         mActive = false;
     }
 
-    private final List<SpeedRange> mSpeedRanges;
     private final VolumeLevelsStorage mVolumeLevelsStorage;
     private final VolumeLevelManager mVolumeLevelManager;
+    private List<SpeedRange> mSpeedRanges;
     private boolean mActive;
     private SpeedRange mCurrentSpeedRange;
 }

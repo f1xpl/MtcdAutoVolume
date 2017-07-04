@@ -34,19 +34,23 @@ public class SpeedRange {
     }
 
     public static List<SpeedRange> calculateSpeedRanges(int count) {
-        List<SpeedRange> list = new ArrayList<>();
+        if(count > 0) {
+            List<SpeedRange> list = new ArrayList<>();
 
-        int currentMinSpeedKph = SpeedRange.MIN_SPEED;
-        final int speedStep = (SpeedRange.MAX_SPEED - SpeedRange.MIN_SPEED) / count;
-        int currentMaxSpeedKph = SpeedRange.MIN_SPEED + speedStep;
+            int currentMinSpeedKph = SpeedRange.MIN_SPEED;
+            final int speedStep = (SpeedRange.MAX_SPEED - SpeedRange.MIN_SPEED) / count;
+            int currentMaxSpeedKph = SpeedRange.MIN_SPEED + speedStep;
 
-        for(int i = 0; i < count; ++i) {
-            list.add(new SpeedRange(currentMinSpeedKph, currentMaxSpeedKph - 1));
-            currentMinSpeedKph += speedStep;
-            currentMaxSpeedKph += speedStep;
+            for(int i = 0; i < count; ++i) {
+                list.add(new SpeedRange(currentMinSpeedKph, currentMaxSpeedKph - 1));
+                currentMinSpeedKph += speedStep;
+                currentMaxSpeedKph += speedStep;
+            }
+
+            return list;
+        } else {
+            return null;
         }
-
-        return list;
     }
 
     private final int mMinKph;

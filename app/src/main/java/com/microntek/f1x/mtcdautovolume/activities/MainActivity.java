@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         mVolumeLevelsStorage = new VolumeLevelsStorage(getSharedPreferences(MtcdAutoVolumeService.SHARED_PREFERENCES_NAME, MODE_PRIVATE));
         mEqualizerBars = new ArrayList<>();
-        mVolumeLevelManager = new VolumeLevelManager(new CarManager());
+        mVolumeLevelManager = new VolumeLevelManager(new CarManager(), this);
 
         try {
             createEqualizerBars(EQUALIZER_BAR_IDS, SpeedUnit.KPH);
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final int ACCESS_FINE_LOCATION_PERMISSION_REQUEST_ID = 1443;
     private final int GENERATE_RANGE_REQUEST_ID = 443;
-    public static final int[] EQUALIZER_BAR_IDS = new int[]{R.id.layoutEqualizerBar0,
+    private static final int[] EQUALIZER_BAR_IDS = new int[]{R.id.layoutEqualizerBar0,
                                                                 R.id.layoutEqualizerBar1,
                                                                 R.id.layoutEqualizerBar2,
                                                                 R.id.layoutEqualizerBar3,

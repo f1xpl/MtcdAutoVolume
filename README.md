@@ -10,6 +10,7 @@ Adjust the volume level to speed automatically.
 * Speed range is <0, 139> Kph or <0, 86> Mph.
 * Generation of volume level in linear manner.
 * Keep music playing while configuring MtcdAutoVolume. Sliding on seekbar will change volume level what gives you preview of volume level settings.
+* Volume level will not be dropped below volume level of the system
 
 ## Disable or enable automatic volume adjustment with MtcdTools
 
