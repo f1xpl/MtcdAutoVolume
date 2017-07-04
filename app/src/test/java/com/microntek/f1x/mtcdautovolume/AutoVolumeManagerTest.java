@@ -27,7 +27,8 @@ public class AutoVolumeManagerTest {
 
     @Test
     public void test_AdjustVolumeForSpeed() throws JSONException {
-        AutoVolumeManager autoVolumeManager = new AutoVolumeManager(mMockVolumeLevelManager, mMockVolumeLevelsStorage, 6);
+        AutoVolumeManager autoVolumeManager = new AutoVolumeManager(mMockVolumeLevelManager, mMockVolumeLevelsStorage);
+        when(mMockVolumeLevelsStorage.getVolumeLevelsCount()).thenReturn(6);
 
         autoVolumeManager.initialize();
         final int speedKph = 64;
@@ -42,7 +43,8 @@ public class AutoVolumeManagerTest {
 
     @Test
     public void test_VolumeNotAdjustedTwiceForTheSameSpeed() throws JSONException {
-        AutoVolumeManager autoVolumeManager = new AutoVolumeManager(mMockVolumeLevelManager, mMockVolumeLevelsStorage, 6);
+        AutoVolumeManager autoVolumeManager = new AutoVolumeManager(mMockVolumeLevelManager, mMockVolumeLevelsStorage);
+        when(mMockVolumeLevelsStorage.getVolumeLevelsCount()).thenReturn(6);
 
         autoVolumeManager.initialize();
         final int speedKph = 64;
@@ -58,7 +60,8 @@ public class AutoVolumeManagerTest {
 
     @Test
     public void test_Toggle() throws JSONException {
-        AutoVolumeManager autoVolumeManager = new AutoVolumeManager(mMockVolumeLevelManager, mMockVolumeLevelsStorage, 6);
+        AutoVolumeManager autoVolumeManager = new AutoVolumeManager(mMockVolumeLevelManager, mMockVolumeLevelsStorage);
+        when(mMockVolumeLevelsStorage.getVolumeLevelsCount()).thenReturn(6);
 
         autoVolumeManager.initialize();
         final int speedKph = 64;

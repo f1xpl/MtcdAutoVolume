@@ -41,9 +41,8 @@ public class MtcdAutoVolumeService extends Service {
         super.onCreate();
 
         mServiceInitialized = false;
-        mAutoVolumeManager = new AutoVolumeManager(new VolumeLevelManager(new CarManager()),
-                                                   new VolumeLevelsStorage(getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE)),
-                                                   MainActivity.EQUALIZER_BAR_IDS.length);
+        mAutoVolumeManager = new AutoVolumeManager(new VolumeLevelManager(new CarManager(), this),
+                                                   new VolumeLevelsStorage(getSharedPreferences(SHARED_PREFERENCES_NAME, MODE_PRIVATE)));
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         IntentFilter intentFilter = new IntentFilter();

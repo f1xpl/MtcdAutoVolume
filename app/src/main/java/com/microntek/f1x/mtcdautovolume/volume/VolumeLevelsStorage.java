@@ -60,6 +60,10 @@ public class VolumeLevelsStorage implements SharedPreferences.OnSharedPreference
         }
     }
 
+    public int getVolumeLevelsCount() {
+        return mVolumeLevels.size();
+    }
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String changedPreference) {
         if(changedPreference.equals(VOLUME_LEVELS_PREFERENCE_NAME)) {

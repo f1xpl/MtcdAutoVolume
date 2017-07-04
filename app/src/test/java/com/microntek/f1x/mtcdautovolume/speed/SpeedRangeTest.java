@@ -16,7 +16,7 @@ public class SpeedRangeTest {
     public void test_generateSpeedRanges() {
         final int speedRangesCount = 4;
         List<SpeedRange> speedRanges = SpeedRange.calculateSpeedRanges(speedRangesCount);
-        assertEquals(speedRanges.size(), speedRangesCount);
+        assertEquals(speedRangesCount, speedRanges.size());
 
         assertEquals(0, speedRanges.get(0).getMinKph());
         assertEquals(34, speedRanges.get(0).getMaxKph());
@@ -51,5 +51,11 @@ public class SpeedRangeTest {
         assertTrue(speedRange.isInRange(24));
         assertTrue(speedRange.isInRange(25));
         assertFalse(speedRange.isInRange(26));
+    }
+
+    @Test
+    public void test_generateSpeedRanges_zeroCount() {
+        List<SpeedRange> speedRanges = SpeedRange.calculateSpeedRanges(0);
+        assertEquals(null, speedRanges);
     }
 }
